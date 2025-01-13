@@ -1,25 +1,18 @@
-iteracoes = 100;
+iteracoes = 150;
 % Parâmetro t variando de 0 a 1
 t = linspace(0, 1, iteracoes); % 100 pontos ao longo da reta
 
 % Equações paramétricas da reta
-x = P4(1) + t * (P1(1) - P4(1)); % x(t) = 600 - 1200 * t
-y = P4(2) + t * (P1(2) - P4(2)); % y(t) = 1000 (fixo)
+x = P1(1) + t * (P4(1) - P1(1)); % x(t) = 600 - 1200 * t
+y = P1(2) + t * (P4(2) - P1(2)); % y(t) = 1000 (fixo)
 
 
 K = 1; % Define ganho
 epsilon = 10e-4; % Define critério de parada
 e_ant = 1;
 e = 0; 
-control_sig = zeros(7, 1000); % 7 joints, assume up to 1000 iterations
-joint_angles = zeros(length(q), 1000); % 1000 é o número máximo de iterações
-
-T4 = [Rd, P4; 0 0 0 1];
-pd = P4;
-% Resolver a cinemática inversa
-q_solucao = robot.ikine(T4, theta, [0, 1, 1, 1 ,1 ,1, 1]); % Ajuste as restrições conforme necessário
-disp('Ângulos das juntas (cinemática inversa):');
-disp(q_solucao);
+control_sig = zeros(7, 10000); % 7 joints, assume up to 1000 iterations
+joint_angles = zeros(length(q), 10000); % 1000 é o número máximo de iterações
 
 T1 = robot.fkine(q_solucao);
 
@@ -41,8 +34,6 @@ j = 0;
 % Control loop
 for iter = 1:iteracoes
     pd = [x(iter) y(iter) 1].';
-    K = 1; % Define ganho
-    epsilon = 10e-4; % Define critério de parada
     e_ant = 1;
     e = 0;
     while (norm(e - e_ant) > epsilon) % Stopping criterion
@@ -85,12 +76,12 @@ for iter = 1:iteracoes
         disp('Ângulos finais das juntas:');
         disp(theta);
     end
-
+end
 % Open a new figure for plotting control signals
 figure('Name', 'Control Signals', 'NumberTitle', 'off'); % Opens a new, named window
 
 % Trim unused columns from control_sig (up to the current iteration)
-control_sig_trimmed = control_sig_1(:, 1:j); 
+control_sig_trimmed = control_sig(:, 1:j); 
 
 % Plot control signals for each joint
 hold on;
@@ -108,7 +99,7 @@ grid on;
 
 
 % Remover colunas não usadas
-joint_angles_trimmed = joint_angles_1(:, 1:j);
+joint_angles_trimmed = joint_angles(:, 1:j);
 
 % Abrir uma nova figura para os ângulos das juntas
 figure('Name', 'Joint Angles', 'NumberTitle', 'off'); % Abre uma nova janela

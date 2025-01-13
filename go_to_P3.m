@@ -1,29 +1,3 @@
-% Initial robot plot with workspace configuration
-figure(1);
-robot.plotopt = {'workspace', [-2 2 -2 2 -2 2], 'view', [120, 30]};
-robot.plot(theta);
-title('Initial Configuration of the Robot');
-xlabel('X-axis (m)');
-ylabel('Y-axis (m)');
-zlabel('Z-axis (m)');
-grid on;
-
-% Target points and orientation
-hold on;
-plot3(P0(1), P0(2), P0(3), 'ro', 'MarkerSize', 10, 'LineWidth', 2);
-plot3(P1(1), P1(2), P1(3), 'ro', 'MarkerSize', 10, 'LineWidth', 2, 'Color', "blue");
-plot3(P2(1), P2(2), P2(3), 'ro', 'MarkerSize', 10, 'LineWidth', 2, 'Color', "green");
-plot3(P3(1), P3(2), P3(3), 'ro', 'MarkerSize', 10, 'LineWidth', 2, 'Color', "yellow");
-plot3(P4(1), P4(2), P4(3), 'ro', 'MarkerSize', 10, 'LineWidth', 2, 'Color', "black");
-legend('P0', 'P1', 'P2', 'P3', 'P4');
-hold off;
-
- % Matriz de rotação constante
-    Rd = [0 0 1;
-         0  1  0;
-         -1 0 0];
-
-
 K = 1; % Define ganho
 epsilon = 10e-4; % Define critério de parada
 e_ant = 1;
@@ -102,7 +76,7 @@ end
 figure('Name', 'Control Signals', 'NumberTitle', 'off'); % Opens a new, named window
 
 % Trim unused columns from control_sig (up to the current iteration)
-control_sig_trimmed = control_sig_1(:, 1:j); 
+control_sig_trimmed = control_sig(:, 1:j); 
 
 % Plot control signals for each joint
 hold on;
@@ -114,13 +88,13 @@ hold off;
 % Add labels, title, and legend
 xlabel('Iterations');
 ylabel('Control Signal: u (rad/s)');
-title('Control Signals for Each Joint Over Iterations from P2 to P3');
+title('Control Signals for Each Joint Over Iterations from P1 to P2');
 legend('show'); % Display joint labels in the legend
 grid on;
 
 
 % Remover colunas não usadas
-joint_angles_trimmed = joint_angles_1(:, 1:j);
+joint_angles_trimmed = joint_angles(:, 1:j);
 
 % Abrir uma nova figura para os ângulos das juntas
 figure('Name', 'Joint Angles', 'NumberTitle', 'off'); % Abre uma nova janela
@@ -135,6 +109,6 @@ hold off;
 % Adicionar rótulos, título e legenda
 xlabel('Iterations');
 ylabel('Joint Angles (rad)');
-title('Joint Angles Over Iterations from P2 to P3');
+title('Joint Angles Over Iterations from P1 to P2');
 legend('show'); % Exibe a legenda
 grid on;

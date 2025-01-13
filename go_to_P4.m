@@ -5,6 +5,7 @@ e = 0;
 control_sig = zeros(7, 1000); % 7 joints, assume up to 1000 iterations
 joint_angles = zeros(length(q), 1000); % 1000 é o número máximo de iterações
 
+%theta = [0 0 0 -pi/2 0 -pi/2 0]'; % Define configuração inicial do robô
 T4 = [Rd, P4; 0 0 0 1];
 pd = P4;
 % Resolver a cinemática inversa
@@ -75,7 +76,7 @@ end
 figure('Name', 'Control Signals', 'NumberTitle', 'off'); % Opens a new, named window
 
 % Trim unused columns from control_sig (up to the current iteration)
-control_sig_trimmed = control_sig_1(:, 1:j); 
+control_sig_trimmed = control_sig(:, 1:j); 
 
 % Plot control signals for each joint
 hold on;
@@ -87,13 +88,13 @@ hold off;
 % Add labels, title, and legend
 xlabel('Iterations');
 ylabel('Control Signal: u (rad/s)');
-title('Control Signals for Each Joint Over Iterations from P3 to P4');
+title('Control Signals for Each Joint Over Iterations from P1 to P2');
 legend('show'); % Display joint labels in the legend
 grid on;
 
 
 % Remover colunas não usadas
-joint_angles_trimmed = joint_angles_1(:, 1:j);
+joint_angles_trimmed = joint_angles(:, 1:j);
 
 % Abrir uma nova figura para os ângulos das juntas
 figure('Name', 'Joint Angles', 'NumberTitle', 'off'); % Abre uma nova janela
@@ -108,6 +109,6 @@ hold off;
 % Adicionar rótulos, título e legenda
 xlabel('Iterations');
 ylabel('Joint Angles (rad)');
-title('Joint Angles Over Iterations from P3 to P4');
+title('Joint Angles Over Iterations from P1 to P2');
 legend('show'); % Exibe a legenda
 grid on;
