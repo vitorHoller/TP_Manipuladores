@@ -16,16 +16,16 @@ disp(q_solucao);
 T1 = robot.fkine(q_solucao);
 
 % % Control loop visualization
-% figure(2);
-% robot.plot(theta');
-% hold on;
-% T1.plot('rgb');
-% title('Robot Path During Control Loop');
-% xlabel('X-axis (m)');
-% ylabel('Y-axis (m)');
-% zlabel('Z-axis (m)');
-% grid on;
-% view(3);
+figure(2);
+robot.plot(theta');
+hold on;
+%T1.plot('rgb');
+title('Robot Path During Control Loop');
+xlabel('X-axis (m)');
+ylabel('Y-axis (m)');
+zlabel('Z-axis (m)');
+grid on;
+view(3);
 
 % Redundancy resolution factor (null space control)
 lambda = 0.01; % Tuning parameter for redundancy resolution
