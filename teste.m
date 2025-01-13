@@ -8,7 +8,7 @@ y = P1(2) + t * (P4(2) - P1(2)); % y(t) = 1000 (fixo)
 
 
 K = 1; % Define ganho
-epsilon = 10e-4; % Define critério de parada
+epsilon = 10e-3; % Define critério de parada
 e_ant = 1;
 e = 0; 
 control_sig = zeros(7, 10000); % 7 joints, assume up to 1000 iterations
@@ -73,6 +73,14 @@ for iter = 1:iteracoes
         err(i) = norm(e);                   % Armazena a norma do erro
         joint_angles(:, j) = theta; % Armazena os ângulos das juntas para cada iteração
         q_seq(:, i) = theta(2:7);
+        % Extraia a posição atual do efetuador usando cinemática direta
+        T_current = robot.fkine(joint_angles(:, i));
+        p_current = transl(T_current); % Posição [x, y, z]
+    
+        % Armazenar pontos para visualização
+        traj_real_x(i) = p_current(1);
+        traj_real_y(i) = p_current(2);
+        traj_real_z(i) = p_current(3);
         disp('Ângulos finais das juntas:');
         disp(theta);
     end
@@ -117,3 +125,18 @@ ylabel('Joint Angles (rad)');
 title('Joint Angles Over Iterations from P3 to P4');
 legend('show'); % Exibe a legenda
 grid on;
+
+
+% Plotar pontos seguidos pelo robô
+plot3(traj_real_x, traj_real_y, traj_real_z, 'bo-', 'LineWidth', 1.5, 'MarkerSize', 5, ...
+    'DisplayName', 'Trajetória Real');
+
+% Adicionar detalhes ao gráfico
+xlabel('X (m)');
+ylabel('Y (m)');
+zlabel('Z (m)');
+title('Trajetória Desejada vs Trajetória Real');
+legend({'Trajetória Desejada', 'Trajetória Real'}, 'Location', 'Best');
+grid on;
+axis equal;
+hold off;
