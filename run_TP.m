@@ -1,0 +1,5 @@
+go_to_P1()
+go_to_P2()
+go_to_P3()
+go_to_P4()
+teste()
