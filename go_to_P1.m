@@ -58,7 +58,7 @@ plot3(P1(1), P1(2), P1(3), 'ro', 'MarkerSize', 10, 'LineWidth', 2, 'Color', "blu
 plot3(P2(1), P2(2), P2(3), 'ro', 'MarkerSize', 10, 'LineWidth', 2, 'Color', "green");
 plot3(P3(1), P3(2), P3(3), 'ro', 'MarkerSize', 10, 'LineWidth', 2, 'Color', "yellow");
 plot3(P4(1), P4(2), P4(3), 'ro', 'MarkerSize', 10, 'LineWidth', 2, 'Color', "black");
-legend('P0', 'P1', 'P2', 'P3', 'P4');
+%legend('P0', 'P1', 'P2', 'P3', 'P4');
 hold off;
 
  % Matriz de rotação constante
@@ -73,9 +73,10 @@ K = 1; % Define ganho
 epsilon = 10e-4; % Define critério de parada
 e_ant = 1;
 e = 0; 
+
 control_sig = zeros(7, 1000); % 7 joints, assume up to 1000 iterations
 joint_angles = zeros(length(q), 1000); % 1000 é o número máximo de iterações
-
+historical_pos = zeros(3, 1000); % 1000 é o número máximo de iterações
 theta = [0 0 0 -pi/2 0 -pi/2 0]'; % Define configuração inicial do robô
 T1 = [Rd, P1; 0 0 0 1];
 % Resolver a cinemática inversa
@@ -89,7 +90,7 @@ T1 = robot.fkine(q_solucao);
 figure(2);
 robot.plot(theta');
 hold on;
-T1.plot('rgb');
+%T1.plot('rgb');
 title('Robot Path During Control Loop');
 xlabel('X-axis (m)');
 ylabel('Y-axis (m)');
@@ -133,6 +134,9 @@ while (norm(e - e_ant) > epsilon) % Stopping criterion
 
     % Visualização e armazenamento de dados
     robot.plot(theta'); 
+    hold on;
+    plot3(p(1), p(2), p(3), 'b.', 'MarkerSize', 15);
+    hold off;
     control_sig(:, i) = [0; u_reduced]; % Adiciona 0 como movimento da junta 1
     err(i) = norm(e);                   % Armazena a norma do erro
     joint_angles(:, i) = theta; % Armazena os ângulos das juntas para cada iteração
@@ -164,7 +168,7 @@ grid on;
 
 % Remover colunas não usadas
 joint_angles_trimmed = joint_angles(:, 1:i);
-
+    
 % Abrir uma nova figura para os ângulos das juntas
 figure('Name', 'Joint Angles', 'NumberTitle', 'off'); % Abre uma nova janela
 

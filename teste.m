@@ -3,8 +3,8 @@ iteracoes = 150;
 t = linspace(0, 1, iteracoes); % 100 pontos ao longo da reta
 
 % Equações paramétricas da reta
-x = P1(1) + t * (P4(1) - P1(1)); % x(t) = 600 - 1200 * t
-y = P1(2) + t * (P4(2) - P1(2)); % y(t) = 1000 (fixo)
+x = P4(1) + t * (P1(1) - P4(1)); % x(t) = 600 - 1200 * t
+y = P4(2) + t * (P1(2) - P4(2)); % y(t) = 1000 (fixo)
 
 
 K = 1; % Define ganho
@@ -16,17 +16,17 @@ joint_angles = zeros(length(q), 10000); % 1000 é o número máximo de iteraçõ
 
 T1 = robot.fkine(q_solucao);
 
-% Control loop visualization
-figure(2);
-robot.plot(theta');
-hold on;
-T1.plot('rgb');
-title('Robot Path During Control Loop');
-xlabel('X-axis (m)');
-ylabel('Y-axis (m)');
-zlabel('Z-axis (m)');
-grid on;
-view(3);
+% % Control loop visualization
+% figure(2);
+% robot.plot(theta');
+% hold on;
+% T1.plot('rgb');
+% title('Robot Path During Control Loop');
+% xlabel('X-axis (m)');
+% ylabel('Y-axis (m)');
+% zlabel('Z-axis (m)');
+% grid on;
+% view(3);
 
 % Redundancy resolution factor (null space control)
 lambda = 0.01; % Tuning parameter for redundancy resolution
@@ -69,20 +69,12 @@ for iter = 1:iteracoes
     
         % Visualização e armazenamento de dados
         robot.plot(theta'); 
+        plot3(p(1), p(2), p(3), 'r.', 'MarkerSize', 15);
         control_sig(:, j) = [0; u_reduced]; % Adiciona 0 como movimento da junta 1
         err(i) = norm(e);                   % Armazena a norma do erro
         joint_angles(:, j) = theta; % Armazena os ângulos das juntas para cada iteração
         q_seq(:, i) = theta(2:7);
         % Extraia a posição atual do efetuador usando cinemática direta
-        T_current = robot.fkine(joint_angles(:, i));
-        p_current = transl(T_current); % Posição [x, y, z]
-    
-        % Armazenar pontos para visualização
-        traj_real_x(i) = p_current(1);
-        traj_real_y(i) = p_current(2);
-        traj_real_z(i) = p_current(3);
-        disp('Ângulos finais das juntas:');
-        disp(theta);
     end
 end
 % Open a new figure for plotting control signals

@@ -15,17 +15,17 @@ disp(q_solucao);
 
 T1 = robot.fkine(q_solucao);
 
-% Control loop visualization
-figure(2);
-robot.plot(theta');
-hold on;
-T1.plot('rgb');
-title('Robot Path During Control Loop');
-xlabel('X-axis (m)');
-ylabel('Y-axis (m)');
-zlabel('Z-axis (m)');
-grid on;
-view(3);
+% % Control loop visualization
+% figure(2);
+% robot.plot(theta');
+% hold on;
+% T1.plot('rgb');
+% title('Robot Path During Control Loop');
+% xlabel('X-axis (m)');
+% ylabel('Y-axis (m)');
+% zlabel('Z-axis (m)');
+% grid on;
+% view(3);
 
 % Redundancy resolution factor (null space control)
 lambda = 0.01; % Tuning parameter for redundancy resolution
@@ -64,6 +64,7 @@ while (norm(e - e_ant) > epsilon) % Stopping criterion
 
     % Visualização e armazenamento de dados
     robot.plot(theta'); 
+    plot3(p(1), p(2), p(3), 'b.', 'MarkerSize', 15);
     control_sig(:, j) = [0; u_reduced]; % Adiciona 0 como movimento da junta 1
     err(i) = norm(e);                   % Armazena a norma do erro
     joint_angles(:, j) = theta; % Armazena os ângulos das juntas para cada iteração
