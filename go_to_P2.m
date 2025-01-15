@@ -2,8 +2,6 @@ K = 1; % Define ganho
 epsilon = 10e-4; % Define critério de parada
 e_ant = 1;
 e = 0; 
-control_sig = zeros(7, 1000); % 7 joints, assume up to 1000 iterations
-joint_angles = zeros(length(q), 1000); % 1000 é o número máximo de iterações
 
 %theta = [0 0 0 -pi/2 0 -pi/2 0]'; % Define configuração inicial do robô
 T2 = [Rd, P2; 0 0 0 1];
@@ -29,7 +27,8 @@ view(3);
 
 % Redundancy resolution factor (null space control)
 lambda = 0.01; % Tuning parameter for redundancy resolution
-j = 0;
+j_ant = i + 1;
+j  = i;
 % Control loop
 while (norm(e - e_ant) > epsilon) % Stopping criterion
     i = i + 1; % Counter
@@ -64,11 +63,12 @@ while (norm(e - e_ant) > epsilon) % Stopping criterion
 
     % Visualização e armazenamento de dados
     robot.plot(theta'); 
-    plot3(p(1), p(2), p(3), 'b.', 'MarkerSize', 15);
+    plot3(p(1), p(2), p(3), 'b.', 'MarkerSize', 3);
     control_sig(:, j) = [0; u_reduced]; % Adiciona 0 como movimento da junta 1
-    err(i) = norm(e);                   % Armazena a norma do erro
+    err(j) = norm(e);                   % Armazena a norma do erro   
+    err_rot(:, j) =  [nphi_err(1) nphi_err(2) nphi_err(3)];
     joint_angles(:, j) = theta; % Armazena os ângulos das juntas para cada iteração
-    q_seq(:, i) = theta(2:7);
+    q_seq(:, j) = theta(2:7);
     disp('Ângulos finais das juntas:');
     disp(theta);
 end
@@ -77,7 +77,7 @@ end
 figure('Name', 'Control Signals', 'NumberTitle', 'off'); % Opens a new, named window
 
 % Trim unused columns from control_sig (up to the current iteration)
-control_sig_trimmed = control_sig(:, 1:j); 
+control_sig_trimmed = control_sig(:, j_ant:j); 
 
 % Plot control signals for each joint
 hold on;
@@ -95,7 +95,7 @@ grid on;
 
 
 % Remover colunas não usadas
-joint_angles_trimmed = joint_angles(:, 1:j);
+joint_angles_trimmed = joint_angles(:, j_ant:j);
 
 % Abrir uma nova figura para os ângulos das juntas
 figure('Name', 'Joint Angles', 'NumberTitle', 'off'); % Abre uma nova janela
@@ -112,4 +112,24 @@ xlabel('Iterations');
 ylabel('Joint Angles (rad)');
 title('Joint Angles Over Iterations from P1 to P2');
 legend('show'); % Exibe a legenda
+grid on;
+
+% Remover colunas não usadas
+err_rot_trimmed = err_rot(:, j_ant:j);
+
+% Abrir uma nova figura para os ângulos das juntas
+figure('Name', 'Error Row Pitch Yaw from P1 to P2', 'NumberTitle', 'off'); % Abre uma nova janela
+
+% Plotar os ângulos para cada junta
+hold on;
+for n = 1:size(err_rot_trimmed, 1) % Loop sobre todas as juntas
+    plot(err_rot_trimmed(n, :), 'DisplayName', ['Row', 'Pitch', 'Yaw']);
+end
+hold off;
+
+% Adicionar rótulos, título e legenda
+xlabel('Tempo (s)');
+ylabel('Erro de Orientação (graus)');
+title('Erro de Orientação');
+legend('Roll', 'Pitch', 'Yaw');
 grid on;
