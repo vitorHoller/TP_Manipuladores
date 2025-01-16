@@ -69,8 +69,8 @@ hold off;
 i = 0;
 pd = P1;
 
-K = 1; % Define ganho
-epsilon = 10e-4; % Define critério de parada
+K = 0.1; % Define ganho
+epsilon = 10e-3; % Define critério de parada
 e_ant = 1;
 e = 0; 
 
@@ -127,7 +127,7 @@ while (norm(e - e_ant) > epsilon) % Stopping criterion
     u_reduced = pinv(J_reduced) * (K * e); % Movimento das juntas 2 a 7
 
     % Atualiza apenas as juntas 2 a 7
-    theta(2:end) = theta(2:end) + 0.1 * u_reduced;
+    theta(2:end) = theta(2:end) + u_reduced;
 
     % Junta 1 permanece fixa
     theta(1) = 0;
@@ -155,14 +155,14 @@ control_sig_trimmed = control_sig(:, 1:i);
 % Plot control signals for each joint
 hold on;
 for n = 1:size(control_sig_trimmed, 1) % Loop over all joints
-    plot(control_sig_trimmed(n, :), 'DisplayName', ['Joint ', num2str(n)]);
+    plot(control_sig_trimmed(n, :), 'DisplayName', ['Junta ', num2str(n)]);
 end
 hold off;
 
 % Add labels, title, and legend
-xlabel('Iterations');
-ylabel('Control Signal: u (rad/s)');
-title('Control Signals for Each Joint Over Iterations from P0 to P1');
+xlabel('Iteraçoes');
+ylabel('Sinal de Controle: u (rad/s)');
+title('Sinal de Controle para cada Junta de P0 a P1');
 legend('show'); % Display joint labels in the legend
 grid on;
 
@@ -176,14 +176,14 @@ figure('Name', 'Joint Angles', 'NumberTitle', 'off'); % Abre uma nova janela
 % Plotar os ângulos para cada junta
 hold on;
 for n = 1:size(joint_angles_trimmed, 1) % Loop sobre todas as juntas
-    plot(joint_angles_trimmed(n, :), 'DisplayName', ['Joint ', num2str(n)]);
+    plot(joint_angles_trimmed(n, :), 'DisplayName', ['Junta ', num2str(n)]);
 end
 hold off;
 
 % Adicionar rótulos, título e legenda
-xlabel('Iterations');
-ylabel('Joint Angles (rad)');
-title('Joint Angles Over Iterations from P0 to P1');
+xlabel('Iteraçoes');
+ylabel('Angulo das Juntas(rad)');
+title('Angulos das Juntas de P0 a P1');
 legend('show'); % Exibe a legenda
 grid on;
 
@@ -195,7 +195,7 @@ figure('Name', 'Error Norm from P0 to P1', 'NumberTitle', 'off'); % Abre uma nov
 plot(err(1:i), 'LineWidth', 1.5);
 xlabel('Tempo (s)');
 ylabel('Erro de Posição (mm)');
-title('Erro de Posição');
+title('Erro de Posição de P0 a P1');
 grid on;
 
 
@@ -216,6 +216,6 @@ hold off;
 % Adicionar rótulos, título e legenda
 xlabel('Tempo (s)');
 ylabel('Erro de Orientação (graus)');
-title('Erro de Orientação');
+title('Erro de Orientação de P0 a P1');
 legend('Roll', 'Pitch', 'Yaw');
 grid on;

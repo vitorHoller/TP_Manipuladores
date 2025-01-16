@@ -16,14 +16,14 @@ control_sig_trimmed = control_sig(:, 1:j);
 % Plot control signals for each joint
 hold on;
 for n = 1:size(control_sig_trimmed, 1) % Loop over all joints
-    plot(control_sig_trimmed(n, :), 'DisplayName', ['Joint ', num2str(n)]);
+    plot(control_sig_trimmed(n, :), 'DisplayName', ['Junta ', num2str(n)]);
 end
 hold off;
 
 % Add labels, title, and legend
-xlabel('Iterations');
-ylabel('Control Signal: u (rad/s)');
-title('Control Signals for Each Joint Over Iterations');
+xlabel('Iteraçoes');
+ylabel('Sinal de Controle: u (rad/s)');
+title('Sinal de Controle para cada Junta Movimento Completo');
 legend('show'); % Display joint labels in the legend
 grid on;
 
@@ -37,14 +37,15 @@ figure('Name', 'Joint Angles', 'NumberTitle', 'off'); % Abre uma nova janela
 % Plotar os ângulos para cada junta
 hold on;
 for n = 1:size(joint_angles_trimmed, 1) % Loop sobre todas as juntas
-    plot(joint_angles_trimmed(n, :), 'DisplayName', ['Joint ', num2str(n)]);
+    plot(joint_angles_trimmed(n, :), 'DisplayName', ['Junta ', num2str(n)]);
 end
 hold off;
 
+
 % Adicionar rótulos, título e legenda
-xlabel('Iterations');
-ylabel('Joint Angles (rad)');
-title('Joint Angles Over Iterations');
+xlabel('Iteraçoes');
+ylabel('Angulo das Juntas(rad)');
+title('Angulos das Juntas Movimento Completo');
 legend('show'); % Exibe a legenda
 grid on;
 
@@ -55,7 +56,7 @@ figure('Name', 'Error Norm', 'NumberTitle', 'off'); % Abre uma nova janela
 plot(err(1:i), 'LineWidth', 1.5);
 xlabel('Tempo (s)');
 ylabel('Erro de Posição (mm)');
-title('Erro de Posição');
+title('Erro de Posição Movimento Completo');
 grid on;
 
 
@@ -76,6 +77,6 @@ hold off;
 % Adicionar rótulos, título e legenda
 xlabel('Tempo (s)');
 ylabel('Erro de Orientação (graus)');
-title('Erro de Orientação');
+title('Erro de Orientação Movimento Completo');
 legend('Roll', 'Pitch', 'Yaw');
 grid on;

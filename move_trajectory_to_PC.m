@@ -19,8 +19,8 @@ view(3);
 
 % Redundancy resolution factor (null space control)
 j_ant = j + 1;
-n_iteracoes = 50; % Número total de iterações desejadas
-tempo_total = 15;
+n_iteracoes = 300; % Número total de iterações desejadas
+tempo_total = 60;
 deltat = tempo_total / n_iteracoes; %
 PC =  [1; 0; 0.3];
 % Control loop
@@ -59,7 +59,7 @@ for ts = 1:n_iteracoes
     u_reduced = pinv(J_reduced) * (K * e + [0 0.6/tempo_total 0 0 0 0].'); % Movimento das juntas 2 a 7
 
     % Atualiza apenas as juntas 2 a 7
-    theta(2:end) = theta(2:end) + 0.1 * u_reduced;
+    theta(2:end) = theta(2:end) + u_reduced;
 
     % Junta 1 permanece fixa
     theta(1) = 0;
@@ -90,16 +90,18 @@ control_sig_trimmed = control_sig(:, j_ant:j);
 % Plot control signals for each joint
 hold on;
 for m = 1:size(control_sig_trimmed, 1) % Loop over all joints
-    plot(control_sig_trimmed(m, :), 'DisplayName', ['Joint ', num2str(m)]);
+    plot(control_sig_trimmed(m, :), 'DisplayName', ['Junta ', num2str(m)]);
 end
 hold off;
 
+
 % Add labels, title, and legend
-xlabel('Iterations');
-ylabel('Control Signal: u (rad/s)');
-title('Control Signals for Each Joint Over Iterations from P2 to PC');
+xlabel('Iteraçoes');
+ylabel('Sinal de Controle: u (rad/s)');
+title('Sinal de Controle para cada Junta de P2 a PC');
 legend('show'); % Display joint labels in the legend
 grid on;
+
 
 
 % Remover colunas não usadas
@@ -111,14 +113,15 @@ figure('Name', 'Joint Angles', 'NumberTitle', 'off'); % Abre uma nova janela
 % Plotar os ângulos para cada junta
 hold on;
 for m = 1:size(joint_angles_trimmed, 1) % Loop sobre todas as juntas
-    plot(joint_angles_trimmed(m, :), 'DisplayName', ['Joint ', num2str(m)]);
+    plot(joint_angles_trimmed(m, :), 'DisplayName', ['Junta ', num2str(m)]);
 end
 hold off;
 
+
 % Adicionar rótulos, título e legenda
-xlabel('Iterations');
-ylabel('Joint Angles (rad)');
-title('Joint Angles Over Iterations from P2 to PC');
+xlabel('Iteraçoes');
+ylabel('Angulo das Juntas(rad)');
+title('Angulos das Juntas de P2 a PC');
 legend('show'); % Exibe a legenda
 grid on;
 
@@ -130,7 +133,7 @@ figure('Name', 'Error Norm from  P2 to PC', 'NumberTitle', 'off'); % Abre uma no
 plot(err(j_ant:j), 'LineWidth', 1.5);
 xlabel('Tempo (s)');
 ylabel('Erro de Posição (mm)');
-title('Erro de Posição');
+title('Erro de Posição de P2 a PC');
 grid on;
 
 
@@ -150,7 +153,7 @@ hold off;
 % Adicionar rótulos, título e legenda
 xlabel('Tempo (s)');
 ylabel('Erro de Orientação (graus)');
-title('Erro de Orientação');
+title('Erro de Orientação de P2 a PC');
 legend('Roll', 'Pitch', 'Yaw');
 grid on;
 
