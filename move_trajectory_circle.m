@@ -21,23 +21,24 @@ view(3);
 Pcentro = [1; 0; 0.65]; % Centro do círculo
 raio = 0.35; % Raio do círculo
 j_ant = j + 1;
-n_iteracoes = 1000; % Número total de iterações desejadas
-tempo_volta = 60; % Tempo para uma volta completa
+n_iteracoes = 300; % Número total de iterações desejadas
+tempo_volta = 30; % Tempo para uma volta completa
 n_voltas = 2; % Número de voltas
 tempo_total = n_voltas * tempo_volta;
 deltat = tempo_total / n_iteracoes; %
 omega = 2 * pi / tempo_volta; % Velocidade angular (rad/s)
 
+phi = atan2((PC(3) - Pcentro(3)) / raio, (PC(2) - Pcentro(2)) / raio);
 
 % Control loop
 tic;
 for ts = 1:n_iteracoes
     iter_start = tic;
     t = (ts - 1) * deltat; % Tempo atual
-    fprintf('Tempo atual: %.2f segundos\n', t);
+    %fprintf('Tempo atual: %.2f segundos\n', t);
     x = Pcentro(1); 
-    y = Pcentro(2) + raio * cos(omega * t); 
-    z = Pcentro(3) + raio * sin(omega * t); 
+    y = Pcentro(2) + raio * cos(omega * t + phi); 
+    z = Pcentro(3) + raio * sin(omega * t + phi); 
     
     pd = [x y z].';
     i = i + 1; % Counter
@@ -62,7 +63,7 @@ for ts = 1:n_iteracoes
     e = [p_err'; nphi_err'];
 
     % Resolve o controle com a jacobiana reduzida
-    u_reduced = pinv(J_reduced) * (K * e + [0 -raio*omega*sin(omega*t) raio*omega*cos(omega*t) 0 0 0].'); % Movimento das juntas 2 a 7
+    u_reduced = pinv(J_reduced) * (K * e + [0 -raio*omega*sin(omega*t + phi) raio*omega*cos(omega*t + phi ) 0 0 0].'); % Movimento das juntas 2 a 7
 
     % Atualiza apenas as juntas 2 a 7
     theta(2:end) = theta(2:end) + u_reduced;

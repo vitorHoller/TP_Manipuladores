@@ -39,27 +39,27 @@ disp(J_reduced);
  P2 = [1; -0.6; 0.3]; % [1000; -600; 300]
  P3 = [1; 0.6; 0.3]; % [1000; 600; 300]
  P4 = [1; 0.6; 1]; % [1000; 600; 1000]
-
-% Initial robot plot with workspace configuration
-figure(1);
-robot.plotopt = {'workspace', [-2 2 -2 2 -2 2], 'view', [120, 30]};
-robot.plot(q);
-title('Initial Configuration of the Robot');
-xlabel('X-axis (m)');
-ylabel('Y-axis (m)');
-zlabel('Z-axis (m)');
-grid on;
-
-pause(3);
-% Target points and orientation
-hold on;
-plot3(P0(1), P0(2), P0(3), 'ro', 'MarkerSize', 10, 'LineWidth', 2);
-plot3(P1(1), P1(2), P1(3), 'ro', 'MarkerSize', 10, 'LineWidth', 2, 'Color', "blue");
-plot3(P2(1), P2(2), P2(3), 'ro', 'MarkerSize', 10, 'LineWidth', 2, 'Color', "green");
-plot3(P3(1), P3(2), P3(3), 'ro', 'MarkerSize', 10, 'LineWidth', 2, 'Color', "yellow");
-plot3(P4(1), P4(2), P4(3), 'ro', 'MarkerSize', 10, 'LineWidth', 2, 'Color', "black");
-%legend('P0', 'P1', 'P2', 'P3', 'P4');
-hold off;
+% 
+% % Initial robot plot with workspace configuration
+% figure(1);
+% robot.plotopt = {'workspace', [-2 2 -2 2 -2 2], 'view', [120, 30]};
+% robot.plot(q);
+% title('Initial Configuration of the Robot');
+% xlabel('X-axis (m)');
+% ylabel('Y-axis (m)');
+% zlabel('Z-axis (m)');
+% grid on;
+% 
+% pause(3);
+% % Target points and orientation
+% hold on;
+% plot3(P0(1), P0(2), P0(3), 'ro', 'MarkerSize', 10, 'LineWidth', 2);
+% plot3(P1(1), P1(2), P1(3), 'ro', 'MarkerSize', 10, 'LineWidth', 2, 'Color', "blue");
+% plot3(P2(1), P2(2), P2(3), 'ro', 'MarkerSize', 10, 'LineWidth', 2, 'Color', "green");
+% plot3(P3(1), P3(2), P3(3), 'ro', 'MarkerSize', 10, 'LineWidth', 2, 'Color', "yellow");
+% plot3(P4(1), P4(2), P4(3), 'ro', 'MarkerSize', 10, 'LineWidth', 2, 'Color', "black");
+% %legend('P0', 'P1', 'P2', 'P3', 'P4');
+% hold off;
 
  % Matriz de rotação constante
     Rd = [0 0 1;
@@ -87,7 +87,7 @@ disp(q_solucao);
 T1 = robot.fkine(q_solucao);
 
 % Control loop visualization
-figure(2);
+figure(1);
 robot.plot(theta');
 hold on;
 %T1.plot('rgb');
@@ -95,6 +95,7 @@ title('Robot Path During Control Loop');
 xlabel('X-axis (m)');
 ylabel('Y-axis (m)');
 zlabel('Z-axis (m)');
+robot.plotopt = {'workspace', [-2 2 -2 2 -2 2], 'view', [120, 30]};
 grid on;
 view(3);
 
@@ -145,7 +146,7 @@ while (norm(e - e_ant) > epsilon) % Stopping criterion
     disp('Ângulos finais das juntas:');
     disp(theta);
 end
-
+% 
 % Open a new figure for plotting control signals
 figure('Name', 'Control Signals', 'NumberTitle', 'off'); % Opens a new, named window
 

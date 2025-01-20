@@ -20,7 +20,7 @@ view(3);
 % Redundancy resolution factor (null space control)
 j_ant = j + 1;
 n_iteracoes = 300; % Número total de iterações desejadas
-tempo_total = 60;
+tempo_total = 30;
 deltat = tempo_total / n_iteracoes; %
 PC =  [1; 0; 0.3];
 % Control loop
@@ -28,7 +28,7 @@ tic;
 for ts = 1:n_iteracoes
     iter_start = tic;
     t = (ts - 1) * deltat; % Tempo atual
-    fprintf('Tempo atual: %.2f segundos\n', t);
+    %fprintf('Tempo atual: %.2f segundos\n', t);
     x = P2(1) + t * (PC(1) - P2(1))/tempo_total; 
     y = P2(2) + t * (PC(2) - P2(2))/tempo_total; 
     z = P2(3) + t * (PC(3) - P2(3))/tempo_total; 

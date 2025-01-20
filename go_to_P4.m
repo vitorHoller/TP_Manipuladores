@@ -71,7 +71,7 @@ while (norm(e - e_ant) > epsilon) % Stopping criterion
     disp('Ângulos finais das juntas:');
     disp(theta);
 end
-
+% 
 % Open a new figure for plotting control signals
 figure('Name', 'Control Signals', 'NumberTitle', 'off'); % Opens a new, named window
 

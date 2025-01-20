@@ -20,7 +20,7 @@ view(3);
 % Redundancy resolution factor (null space control)
 j_ant = j + 1;
 n_iteracoes = 300; % Número total de iterações desejadas
-tempo_total = 60;
+tempo_total = 30;
 deltat = tempo_total / n_iteracoes; %
 
 % Control loop
@@ -28,7 +28,7 @@ tic;
 for ts = 1:n_iteracoes
     iter_start = tic;
     t = (ts - 1) * deltat; % Tempo atual
-    fprintf('Tempo atual: %.2f segundos\n', t);
+    %fprintf('Tempo atual: %.2f segundos\n', t);
     x = P4(1) + t * (P1(1) - P4(1))/tempo_total;
     y = P4(2) + t * (P1(2) - P4(2))/tempo_total; 
     z = P4(3) + t * (P1(3) - P4(3))/tempo_total;
@@ -81,7 +81,7 @@ for ts = 1:n_iteracoes
 end
 toc;
 
-
+% 
 % Open a new figure for plotting control signals
 figure('Name', 'Control Signals', 'NumberTitle', 'off'); % Opens a new, named window
 

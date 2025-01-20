@@ -19,7 +19,7 @@ view(3);
 % Redundancy resolution factor (null space control)
 j_ant = j + 1;
 n_iteracoes = 300; % Número total de iterações desejadas
-tempo_total = 60;
+tempo_total = 30;
 deltat = tempo_total / n_iteracoes; %
 
 % Control loop
@@ -27,7 +27,7 @@ tic;
 for ts = 1:n_iteracoes
     iter_start = tic;
     t = (ts - 1) * deltat; % Tempo atual
-    fprintf('Tempo atual: %.2f segundos\n', t);
+    %fprintf('Tempo atual: %.2f segundos\n', t);
     x = P1(1) + t * (P2(1) - P1(1))/tempo_total; 
     y = P1(2) + t * (P2(2) - P1(2))/tempo_total; 
     z = P1(3) + t * (P2(3) - P1(3))/tempo_total; 
@@ -152,4 +152,4 @@ ylabel('Erro de Orientação (graus)');
 title('Erro de Orientação de P1 a P2 Movimento Linear');
 legend('Roll', 'Pitch', 'Yaw');
 grid on;
-
+% 
