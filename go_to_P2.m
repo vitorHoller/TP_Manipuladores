@@ -1,5 +1,5 @@
 K = 0.1; % Define ganho
-epsilon = 10e-3; % Define critério de parada
+epsilon = 10e-5; % Define critério de parada
 e_ant = 1;
 e = 0; 
 
@@ -14,7 +14,7 @@ disp(q_solucao);
 T1 = robot.fkine(q_solucao);
 
 %Control loop visualization
-figure(2);
+figure(1);
 robot.plot(theta');
 hold on;
 %T1.plot('rgb');
@@ -53,7 +53,7 @@ while (norm(e - e_ant) > epsilon) % Stopping criterion
     e = [p_err'; nphi_err'];
 
     % Resolve o controle com a jacobiana reduzida
-    u_reduced = pinv(J_reduced) * (K * e); % Movimento das juntas 2 a 7
+    u_reduced = inv(J_reduced) * (K * e); % Movimento das juntas 2 a 7
 
     % Atualiza apenas as juntas 2 a 7
     theta(2:end) = theta(2:end) + u_reduced;
@@ -73,73 +73,73 @@ while (norm(e - e_ant) > epsilon) % Stopping criterion
     disp(theta);
 end
 
-% Open a new figure for plotting control signals
-figure('Name', 'Control Signals', 'NumberTitle', 'off'); % Opens a new, named window
-
-% Trim unused columns from control_sig (up to the current iteration)
-control_sig_trimmed = control_sig(:, j_ant:j); 
-
-% Plot control signals for each joint
-hold on;
-for m = 1:size(control_sig_trimmed, 1) % Loop over all joints
-    plot(control_sig_trimmed(m, :), 'DisplayName', ['Junta ', num2str(m)]);
-end
-hold off;
-
-% Add labels, title, and legend
-xlabel('Iteraçoes');
-ylabel('Sinal de Controle: u (rad/s)');
-title('Sinal de Controle para cada Junta de P1 a P2');
-legend('show'); % Display joint labels in the legend
-grid on;
-
-
-% Remover colunas não usadas
-joint_angles_trimmed = joint_angles(:, j_ant:j);
-
-% Abrir uma nova figura para os ângulos das juntas
-figure('Name', 'Joint Angles', 'NumberTitle', 'off'); % Abre uma nova janela
-
-% Plotar os ângulos para cada junta
-hold on;
-for m = 1:size(joint_angles_trimmed, 1) % Loop sobre todas as juntas
-    plot(joint_angles_trimmed(m, :), 'DisplayName', ['Junta ', num2str(m)]);
-end
-hold off;
-
-% Adicionar rótulos, título e legenda
-xlabel('Iteraçoes');
-ylabel('Angulo das Juntas(rad)');
-title('Angulos das Juntas de P1 a P2');
-legend('show'); % Exibe a legenda
-grid on;
-grid on;
-% Abrir uma nova figura para os ângulos das juntas
-figure('Name', 'Error Norm from  P2 to P3', 'NumberTitle', 'off'); % Abre uma nova janela
-
-% Plotar os ângulos para cada junta
-plot(err(j_ant:j), 'LineWidth', 1.5);
-xlabel('Tempo (s)');
-ylabel('Erro de Posição (mm)');
-title('Erro de Posição de P1 a P2');
-grid on;
-
-% Remover colunas não usadas
-err_rot_trimmed = err_rot(:, j_ant:j);
-
-% Abrir uma nova figura para os ângulos das juntas
-figure('Name', 'Error Row Pitch Yaw from P1 to P2', 'NumberTitle', 'off'); % Abre uma nova janela
-
-% Plotar os ângulos para cada junta
-hold on;
-for n = 1:size(err_rot_trimmed, 1) % Loop sobre todas as juntas
-    plot(err_rot_trimmed(n, :), 'DisplayName', ['Row', 'Pitch', 'Yaw']);
-end
-hold off;
-
-% Adicionar rótulos, título e legenda
-xlabel('Tempo (s)');
-ylabel('Erro de Orientação (graus)');
-title('Erro de Orientação de P1 a P2');
-legend('Roll', 'Pitch', 'Yaw');
-grid on;
+% % Open a new figure for plotting control signals
+% figure('Name', 'Control Signals', 'NumberTitle', 'off'); % Opens a new, named window
+% 
+% % Trim unused columns from control_sig (up to the current iteration)
+% control_sig_trimmed = control_sig(:, j_ant:j); 
+% 
+% % Plot control signals for each joint
+% hold on;
+% for m = 1:size(control_sig_trimmed, 1) % Loop over all joints
+%     plot(control_sig_trimmed(m, :), 'DisplayName', ['Junta ', num2str(m)]);
+% end
+% hold off;
+% 
+% % Add labels, title, and legend
+% xlabel('Iteraçoes');
+% ylabel('Sinal de Controle: u (rad/s)');
+% title('Sinal de Controle para cada Junta de P1 a P2');
+% legend('show'); % Display joint labels in the legend
+% grid on;
+% 
+% 
+% % Remover colunas não usadas
+% joint_angles_trimmed = joint_angles(:, j_ant:j);
+% 
+% % Abrir uma nova figura para os ângulos das juntas
+% figure('Name', 'Joint Angles', 'NumberTitle', 'off'); % Abre uma nova janela
+% 
+% % Plotar os ângulos para cada junta
+% hold on;
+% for m = 1:size(joint_angles_trimmed, 1) % Loop sobre todas as juntas
+%     plot(joint_angles_trimmed(m, :), 'DisplayName', ['Junta ', num2str(m)]);
+% end
+% hold off;
+% 
+% % Adicionar rótulos, título e legenda
+% xlabel('Iteraçoes');
+% ylabel('Angulo das Juntas(rad)');
+% title('Angulos das Juntas de P1 a P2');
+% legend('show'); % Exibe a legenda
+% grid on;
+% grid on;
+% % Abrir uma nova figura para os ângulos das juntas
+% figure('Name', 'Error Norm from  P2 to P3', 'NumberTitle', 'off'); % Abre uma nova janela
+% 
+% % Plotar os ângulos para cada junta
+% plot(err(j_ant:j), 'LineWidth', 1.5);
+% xlabel('Tempo (s)');
+% ylabel('Erro de Posição (mm)');
+% title('Erro de Posição de P1 a P2');
+% grid on;
+% 
+% % Remover colunas não usadas
+% err_rot_trimmed = err_rot(:, j_ant:j);
+% 
+% % Abrir uma nova figura para os ângulos das juntas
+% figure('Name', 'Error Row Pitch Yaw from P1 to P2', 'NumberTitle', 'off'); % Abre uma nova janela
+% 
+% % Plotar os ângulos para cada junta
+% hold on;
+% for n = 1:size(err_rot_trimmed, 1) % Loop sobre todas as juntas
+%     plot(err_rot_trimmed(n, :), 'DisplayName', ['Row', 'Pitch', 'Yaw']);
+% end
+% hold off;
+% 
+% % Adicionar rótulos, título e legenda
+% xlabel('Tempo (s)');
+% ylabel('Erro de Orientação (graus)');
+% title('Erro de Orientação de P1 a P2');
+% legend('Roll', 'Pitch', 'Yaw');
+% grid on;
